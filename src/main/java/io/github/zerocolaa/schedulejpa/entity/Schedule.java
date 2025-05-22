@@ -1,6 +1,5 @@
 package io.github.zerocolaa.schedulejpa.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -20,19 +19,22 @@ public class Schedule extends BaseEntity {
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
+    public Schedule() {}
 
     public Schedule(String title, String contents) {
-        this.title = title;
+        this.title    = title;
         this.contents = contents;
     }
 
-    public Schedule() {
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
-    public void setAuthor(Author author){
-        this.author = author;
+    public void updateSchedule(String title, String contents) {
+        this.title    = title;
+        this.contents = contents;
     }
 }
