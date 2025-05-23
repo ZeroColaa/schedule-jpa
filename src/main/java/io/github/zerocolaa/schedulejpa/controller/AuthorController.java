@@ -5,6 +5,7 @@ import io.github.zerocolaa.schedulejpa.entity.Author;
 import io.github.zerocolaa.schedulejpa.service.AuthorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class AuthorController {
 
     //회원가입
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(authorService.signUp(requestDto));
     }
@@ -31,7 +32,7 @@ public class AuthorController {
         Author loginUser = authorService.login(requestDto);
         request.getSession(true).setAttribute("LOGIN_USER_ID", loginUser.getId());
 
-        return ResponseEntity.ok(new LoginResponseDto(loginUser));
+        return ResponseEntity.ok(LoginResponseDto.from(loginUser));
     }
 
     //로그아웃
@@ -48,11 +49,20 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.findAuthorById(authorId));
     }
 
-    //수정
+    //이름 && 이메일 수정
     @PutMapping("/{authorId}")
     public ResponseEntity<AuthorResponseDto> updateAuthor(@PathVariable Long authorId,
-                                                    @RequestBody UpdateAuthorRequestDto requestDto) {
+                                                    @RequestBody @Valid UpdateAuthorRequestDto requestDto) {
         return ResponseEntity.ok(authorService.updateAuthor(authorId, requestDto));
+    }
+
+    //비밀번호 수정
+    @PutMapping("/{authorId}/password")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable Long authorId,
+            @RequestBody @Valid UpdatePasswordRequestDto dto) {
+        authorService.updatePassword(authorId, dto);
+        return ResponseEntity.noContent().build();
     }
 
     //삭제

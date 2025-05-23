@@ -10,9 +10,13 @@ public class SignUpResponseDto {
     private final String userName;
     private final String email;
 
-    public SignUpResponseDto(Author author) {
-        this.id         = author.getId();
-        this.userName = author.getUserName();
-        this.email      = author.getEmail();
+    private SignUpResponseDto(Long id, String userName, String email) {
+        this.id       = id;
+        this.userName = userName;
+        this.email    = email;
+    }
+
+    public static SignUpResponseDto from(Author author) {
+        return new SignUpResponseDto(author.getId(), author.getUserName(), author.getEmail());
     }
 }

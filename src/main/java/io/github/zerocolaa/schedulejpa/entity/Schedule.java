@@ -2,10 +2,13 @@ package io.github.zerocolaa.schedulejpa.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
+
 @Entity
 @Table(name = "schedule")
+@Getter
+@NoArgsConstructor
 public class Schedule extends BaseEntity {
 
     @Id
@@ -18,11 +21,10 @@ public class Schedule extends BaseEntity {
     @Column(columnDefinition = "longtext")
     private String contents;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
-    public Schedule() {}
 
     public Schedule(String title, String contents) {
         this.title    = title;

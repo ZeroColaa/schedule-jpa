@@ -1,10 +1,9 @@
 package io.github.zerocolaa.schedulejpa.controller;
 
 import io.github.zerocolaa.schedulejpa.dto.schedule.*;
-import io.github.zerocolaa.schedulejpa.repository.ScheduleRepository;
 import io.github.zerocolaa.schedulejpa.service.ScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class ScheduleController {
     //일정 생성
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(
-            @RequestBody CreateScheduleRequestDto requestDto,
+            @RequestBody @Valid CreateScheduleRequestDto requestDto,
             @SessionAttribute("LOGIN_USER_ID") Long loginUserId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(scheduleService.createSchedule(loginUserId, requestDto));
@@ -36,7 +35,7 @@ public class ScheduleController {
     }
 
     //로그인한 작성자 일정 전체 조회
-    @GetMapping("me")
+    @GetMapping("/me")
     public ResponseEntity<List<ScheduleResponseDto>> findSchedulesByAuthor(
             @SessionAttribute("LOGIN_USER_ID") Long loginUserId){
         return ResponseEntity.ok(scheduleService.findSchedulesByAuthor(loginUserId));
@@ -52,7 +51,7 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long scheduleId,
-            @RequestBody UpdateScheduleRequestDto requestDto,
+            @RequestBody @Valid UpdateScheduleRequestDto requestDto,
             @SessionAttribute("LOGIN_USER_ID") Long loginUserId) {
         return ResponseEntity.ok(scheduleService.updateSchedule(loginUserId, scheduleId, requestDto));
     }

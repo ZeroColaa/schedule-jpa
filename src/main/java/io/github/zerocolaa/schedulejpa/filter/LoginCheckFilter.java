@@ -15,7 +15,7 @@ public class LoginCheckFilter implements Filter {
 
 
     private static final String[] WHITE_LIST = {
-            "/", "/authors/signup", "/authors/login", "/authors/logout"
+            "/", "/authors/signup", "/authors/login"
     };
 
     @Override

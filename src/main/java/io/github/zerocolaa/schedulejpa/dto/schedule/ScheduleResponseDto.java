@@ -12,11 +12,20 @@ public class ScheduleResponseDto {
     private final String userName;
 
 
-    public ScheduleResponseDto(Schedule schedule) {
-        this.id         = schedule.getId();
-        this.title      = schedule.getTitle();
-        this.contents   = schedule.getContents();
-        this.userName = schedule.getAuthor().getUserName();
+    private ScheduleResponseDto(Long id, String title, String contents, String userName) {
+        this.id       = id;
+        this.title    = title;
+        this.contents = contents;
+        this.userName = userName;
+    }
+
+    public static ScheduleResponseDto from(Schedule schedule) {
+        return new ScheduleResponseDto(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getAuthor().getUserName()
+        );
     }
 
 }

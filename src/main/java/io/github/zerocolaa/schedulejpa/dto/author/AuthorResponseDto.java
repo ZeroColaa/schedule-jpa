@@ -12,9 +12,13 @@ public class AuthorResponseDto {
     private final String email;
 
 
-    public AuthorResponseDto(Author author){
-        this.id = author.getId();
-        this.userName = author.getUserName();
-        this.email = author.getEmail();
+    private AuthorResponseDto(Long id, String userName, String email) {
+        this.id       = id;
+        this.userName = userName;
+        this.email    = email;
+    }
+
+    public static AuthorResponseDto from(Author author) {
+        return new AuthorResponseDto(author.getId(), author.getUserName(), author.getEmail());
     }
 }
