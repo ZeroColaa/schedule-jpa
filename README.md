@@ -35,7 +35,7 @@ Author (1) ─── (N) Schedule (1) ─── (N) Comment
 | 일정 단건 조회   | GET    | `/schedules/{id}`                       | -                                  | 일정 정보 + 작성자 이름                        | 200 OK         |
 | 내 일정 목록 조회 | GET    | `/schedules/me`                         | 로그인 필요 (세션 필요)                              | 일정 목록                                 | 200 OK         |
 | 전체 일정 조회   | GET    | `/schedules/all`                        | -                                  | 일정 목록                                 | 200 OK         |
-| 일정 페이징 조회  | GET    | `/schedules/paged?page=0&size=10`       | 쿼리 파라미터                            | 페이지 응답 (댓글 수 포함)                      | 200 OK         |
+| 일정 페이징 조회  | GET    | `/schedules/paged?page=0&size=10`       | 쿼리 파라미터                            | 페이지 응답                    | 200 OK         |
 | 일정 수정      | PUT    | `/schedules/{id}`                       | `{ title, contents }`              | 수정된 일정 정보                             | 200 OK         |
 | 일정 삭제      | DELETE | `/schedules/{id}`                       | -                                  | -                                     | 204 No Content |
 | 댓글 작성      | POST   | `/schedules/{scheduleId}/comments`      | `{ content }`                      | 댓글 정보                                 | 201 CREATED    |
