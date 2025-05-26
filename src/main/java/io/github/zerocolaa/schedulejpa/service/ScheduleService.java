@@ -1,11 +1,15 @@
 package io.github.zerocolaa.schedulejpa.service;
 
+import io.github.zerocolaa.schedulejpa.dto.schedule.SchedulePagedResponseDto;
 import io.github.zerocolaa.schedulejpa.dto.schedule.*;
 import io.github.zerocolaa.schedulejpa.entity.Author;
 import io.github.zerocolaa.schedulejpa.entity.Schedule;
 import io.github.zerocolaa.schedulejpa.repository.AuthorRepository;
+import io.github.zerocolaa.schedulejpa.repository.CommentRepository;
 import io.github.zerocolaa.schedulejpa.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final AuthorRepository   authorRepository;
+    private final CommentRepository commentRepository;
 
     //일정 생성
     public ScheduleResponseDto createSchedule(Long authorId, CreateScheduleRequestDto requestDto) {
@@ -56,6 +61,17 @@ public class ScheduleService {
                 .toList();
     }
 
+    //일정 페이징 조회
+    @Transactional(readOnly = true)
+    public Page<SchedulePagedResponseDto> getPagedSchedules(Pageable pageable) {
+        return scheduleRepository.findAll(pageable)
+                .map(schedule -> {
+                    int commentCount = commentRepository.countByScheduleId(schedule.getId());
+                    return SchedulePagedResponseDto.from(schedule, commentCount);
+                });
+
+    }
+
     //일정 수정
     public ScheduleResponseDto updateSchedule(Long authorId, Long scheduleId,
                                       UpdateScheduleRequestDto dto) {
@@ -73,7 +89,7 @@ public class ScheduleService {
     }
 
 
-    //로그인 한 사용자의 일정을 찾는 함수
+    //로그인 한 사용자 일정을 찾는 함수
     private Schedule findMySchedule(Long scheduleId, Long authorId) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
         if (!schedule.getAuthor().getId().equals(authorId)) {
@@ -82,5 +98,6 @@ public class ScheduleService {
 
         return schedule;
     }
+
 
 }

@@ -1,9 +1,14 @@
 package io.github.zerocolaa.schedulejpa.controller;
 
+import io.github.zerocolaa.schedulejpa.dto.schedule.SchedulePagedResponseDto;
 import io.github.zerocolaa.schedulejpa.dto.schedule.*;
 import io.github.zerocolaa.schedulejpa.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +50,15 @@ public class ScheduleController {
     @GetMapping("/all")
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules() {
         return ResponseEntity.ok(scheduleService.findAllSchedules());
+    }
+
+    //일정 페이징 조회
+    @GetMapping("/paged")
+    public ResponseEntity<List<SchedulePagedResponseDto>> getPagedSchedules(
+            @PageableDefault(size=10,sort="modifiedDateTime",direction = Sort.Direction.DESC)
+            Pageable pageable
+    ){
+        return ResponseEntity.ok(scheduleService.getPagedSchedules(pageable).getContent());
     }
 
     //일정 수정
